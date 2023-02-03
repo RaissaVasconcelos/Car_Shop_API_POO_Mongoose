@@ -94,6 +94,9 @@ var AbstractODM = class {
     );
     return result;
   }
+  async delete(id) {
+    return this.model.findByIdAndDelete(id);
+  }
 };
 var AbstractODM_default = AbstractODM;
 
@@ -142,6 +145,9 @@ var MotorcycleService = class {
     const updated = await this.motorcycleOdm.updated(id, update);
     const result = this.motocyrcleDomain(updated);
     return result;
+  }
+  async delete(id) {
+    return await this.motorcycleOdm.delete(id);
   }
 };
 var Motorcycle_service_default = MotorcycleService;

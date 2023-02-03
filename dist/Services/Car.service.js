@@ -94,6 +94,9 @@ var AbstractODM = class {
     );
     return result;
   }
+  async delete(id) {
+    return this.model.findByIdAndDelete(id);
+  }
 };
 var AbstractODM_default = AbstractODM;
 
@@ -142,6 +145,9 @@ var CarService = class {
     const updated = await this.carodm.updated(id, updateCar);
     const result = this.carsDomain(updated);
     return result;
+  }
+  async delete(id) {
+    return await this.carodm.delete(id);
   }
 };
 var Car_service_default = CarService;

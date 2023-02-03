@@ -47,6 +47,9 @@ var AbstractODM = class {
     );
     return result;
   }
+  async delete(id) {
+    return this.model.findByIdAndDelete(id);
+  }
 };
 var AbstractODM_default = AbstractODM;
 // Annotate the CommonJS export names for ESM import in node:

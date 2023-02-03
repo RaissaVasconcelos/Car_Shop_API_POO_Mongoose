@@ -1,45 +1,52 @@
-import ICar from '../Interfaces/ICar';
-import Cars from '../Domains/Car';
-import CarODM from '../Model/CarODM';
+import IService from '../interface/IService';
+import ICars, { CarsZodSchema } from '../interface/ICars';
+import IModel from '../interface/IModel';
 
-class CarService {
-  private carodm: CarODM;
+class CarService implements IService<ICars> {
+  private _car: IModel<ICars>;
 
-  constructor() {
-    this.carodm = new CarODM();
+  constructor(model: IModel<ICars>) {
+    this._car = model;
   }
 
-  private carsDomain(car: ICar | null): Cars | null {
-    if (car) {
-      return new Cars(car);
+  public async create(car: ICars): Promise<ICars> {
+    // If you don't want Zod to throw errors when validation fails, use .safeParse. 
+    // This method returns an object containing either the successfully parsed data 
+    // or a ZodError instance containing detailed information about the validation problems
+    const parsed = CarsZodSchema.safeParse(car);
+
+    if (!parsed.success) {
+      throw parsed.error;
     }
-    return null;
+
+    return this._car.create(car);
   }
 
-  public async create(car: ICar) {
-    const newcar = await this.carodm.create({ ...car, status: car.status || false });
-    return this.carsDomain(newcar); 
+  public async findAll(): Promise<ICars[]> {
+    return this._car.findAll()
   }
 
-  public async find() {
-    const cars = await this.carodm.findAll();
-    const result = cars.map((car) => this.carsDomain(car));
-    return result;
+  public async findById(_id: string): Promise<ICars> {
+    const car = await this._car.findById(_id);
+    if (!car) throw new Error('Car not found')
+    return car;
   }
 
-  public async findById(id: string) {
-    const car = await this.carodm.findById(id);
-    return this.carsDomain(car);
+  public async updated(_id: string, updateCar: ICars): Promise<ICars | null> {
+    const parsed = CarsZodSchema.safeParse(updateCar);
+
+    if (!parsed.success) {
+      throw parsed.error;
+    }
+
+    // valida se o id é válido
+    await this.findById(_id);
+
+    return this._car.updated(_id, updateCar);
   }
 
-  public async updateCar(id: string, updateCar: ICar) {
-    const updated = await this.carodm.updated(id, updateCar);
-    const result = this.carsDomain(updated);
-    return result;
-  }
-
-  public async delete(id: string) {
-    return await this.carodm.delete(id);
+  public async delete(_id: string): Promise<ICars | null> {
+    return this._car.delete(_id);
   }
 }
 

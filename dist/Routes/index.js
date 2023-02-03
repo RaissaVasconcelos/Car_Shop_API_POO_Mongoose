@@ -98,6 +98,9 @@ var AbstractODM = class {
     );
     return result;
   }
+  async delete(id) {
+    return this.model.findByIdAndDelete(id);
+  }
 };
 var AbstractODM_default = AbstractODM;
 
@@ -146,6 +149,9 @@ var CarService = class {
     const updated = await this.carodm.updated(id, updateCar);
     const result = this.carsDomain(updated);
     return result;
+  }
+  async delete(id) {
+    return await this.carodm.delete(id);
   }
 };
 var Car_service_default = CarService;
@@ -209,6 +215,22 @@ var CarController = class {
       }
     }
   }
+  async delete() {
+    try {
+      const { id } = this.req.params;
+      const deleted = await this.service.delete(id);
+      if (!deleted) {
+        return this.res.status(404 /* NOT_FOUND */).json({ message: "Car not found" });
+      }
+      this.res.status(204 /* NO_CONTENT */).end();
+      return this.res.status(204).end();
+    } catch (error) {
+      const err = error.message;
+      if (err.includes("ObjectId failed for value")) {
+        return this.res.status(422 /* UNPROCESSABLE_ENTITY */).json({ message: "Invalid mongo id" });
+      }
+    }
+  }
 };
 var Car_controller_default = CarController;
 
@@ -218,6 +240,7 @@ route.post("/cars", (req, res, nest) => new Car_controller_default(req, res, nes
 route.get("/cars", (req, res, nest) => new Car_controller_default(req, res, nest).find());
 route.get("/cars/:id", (req, res, nest) => new Car_controller_default(req, res, nest).findById());
 route.put("/cars/:id", (req, res, nest) => new Car_controller_default(req, res, nest).updatedCar());
+route.delete("/cars/:id", (req, res, nest) => new Car_controller_default(req, res, nest).delete());
 var car_route_default = route;
 
 // src/Routes/motorcycle.route.ts
@@ -285,6 +308,9 @@ var MotorcycleService = class {
     const result = this.motocyrcleDomain(updated);
     return result;
   }
+  async delete(id) {
+    return await this.motorcycleOdm.delete(id);
+  }
 };
 var Motorcycle_service_default = MotorcycleService;
 
@@ -334,12 +360,27 @@ var MotorcycleController = class {
   async updatedMotorcycle() {
     try {
       const { id } = this.req.params;
-      const car = this.req.body;
-      const updated = await this.service.update(id, car);
+      const motorcycle = this.req.body;
+      const updated = await this.service.update(id, motorcycle);
       if (!updated) {
         return this.res.status(404 /* NOT_FOUND */).json({ message: "Motorcycle not found" });
       }
       return this.res.status(200 /* OK */).json(updated);
+    } catch (error) {
+      const err = error.message;
+      if (err.includes("ObjectId failed for value")) {
+        return this.res.status(422 /* UNPROCESSABLE_ENTITY */).json({ message: "Invalid mongo id" });
+      }
+    }
+  }
+  async delete() {
+    try {
+      const { id } = this.req.params;
+      const deleted = await this.service.delete(id);
+      if (!deleted) {
+        return this.res.status(404 /* NOT_FOUND */).json({ message: "Motorcycle not found" });
+      }
+      return this.res.status(204 /* NO_CONTENT */).end();
     } catch (error) {
       const err = error.message;
       if (err.includes("ObjectId failed for value")) {

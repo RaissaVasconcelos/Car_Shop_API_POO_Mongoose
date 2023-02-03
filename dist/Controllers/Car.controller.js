@@ -94,6 +94,9 @@ var AbstractODM = class {
     );
     return result;
   }
+  async delete(id) {
+    return this.model.findByIdAndDelete(id);
+  }
 };
 var AbstractODM_default = AbstractODM;
 
@@ -142,6 +145,9 @@ var CarService = class {
     const updated = await this.carodm.updated(id, updateCar);
     const result = this.carsDomain(updated);
     return result;
+  }
+  async delete(id) {
+    return await this.carodm.delete(id);
   }
 };
 var Car_service_default = CarService;
@@ -198,6 +204,22 @@ var CarController = class {
         return this.res.status(404 /* NOT_FOUND */).json({ message: "Car not found" });
       }
       return this.res.status(200 /* OK */).json(updated);
+    } catch (error) {
+      const err = error.message;
+      if (err.includes("ObjectId failed for value")) {
+        return this.res.status(422 /* UNPROCESSABLE_ENTITY */).json({ message: "Invalid mongo id" });
+      }
+    }
+  }
+  async delete() {
+    try {
+      const { id } = this.req.params;
+      const deleted = await this.service.delete(id);
+      if (!deleted) {
+        return this.res.status(404 /* NOT_FOUND */).json({ message: "Car not found" });
+      }
+      this.res.status(204 /* NO_CONTENT */).end();
+      return this.res.status(204).end();
     } catch (error) {
       const err = error.message;
       if (err.includes("ObjectId failed for value")) {

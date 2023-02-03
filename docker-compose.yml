@@ -7,8 +7,6 @@ services:
     image: node:16.14
     # Nome do container para facilitar execução
     container_name: car_shop
-    # Caminho da Dockerfile
-    build: ./ 
     # Mesmo que `docker run -t`
     tty: true
     # Mesmo que `docker run -i`

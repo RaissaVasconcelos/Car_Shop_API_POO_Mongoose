@@ -1,6 +1,6 @@
 import Motorcycle from '../Domains/Motorcycle';
 import IMotorcycle from '../Interfaces/IMotorcycle';
-import MotorcycleODM from '../Model/MotorcycleODM';
+import MotorcycleODM from '../Model/MotorcycleModel';
 
 class MotorcycleService {
   private motorcycleOdm: MotorcycleODM;
