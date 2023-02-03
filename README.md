@@ -31,7 +31,7 @@ Para rodar está aplicação é necessário ter **Git**, **Node**, **Docker** e 
 
 Para conseguir executar os comandos do abaixo também é necessário que seu sistema operacional tenha um terminal Bash instalado. Caso você esteja utilizando Linux ou macOS, o Bash já vem instalado por padrão. Porém, se o seu sistema for Windows, você pode [aprender como instalar](https://dicasdeprogramacao.com.br/como-instalar-o-git-no-windows/).
 
-### 1 - Na raíz do projeto, suba os containers do backend (`uol_backend`) e do frontend (`uol_frontend`)  e o banco de dados (`mysql`) com o comando:
+### 1 - Na raíz do projeto, suba os containers do backend e o banco de dados (`MongoDB`) com o comando:
 
     docker-compose up -d --build
    
