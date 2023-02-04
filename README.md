@@ -50,7 +50,7 @@ Para parar os containers, na pasta raiz do projeto execute o comando:
 
 ## 🔎 Rotas na Api
 
-• Cadastra um novo carro. Rota POST /car
+• Cadastra um novo carro. Rota POST /cars
 
   <h3>Exemplo de requisição:</h3>
   
