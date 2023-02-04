@@ -1,46 +1,50 @@
+import IService from '../interface/IService';
+import IModel from '../interface/IModel';
+import IMotorcycles, { MotorcycleZodSchema } from '../interface/IMotorcycles';
 
-import MotorcycleODM from '../Model/MotorcycleModel';
+class MotorcyleService implements IService<IMotorcycles> {
+  private _motorcycle: IModel<IMotorcycles>;
 
-class MotorcycleService {
-  private motorcycleOdm: MotorcycleODM;
-
-  constructor() {
-    this.motorcycleOdm = new MotorcycleODM();
+  constructor(model: IModel<IMotorcycles>) {
+    this._motorcycle = model;
   }
 
-  private motocyrcleDomain(motorcycle: IMotorcycle | null): Motorcycle | null {
-    if (motorcycle) {
-      return new Motorcycle(motorcycle);
+  public async create(car: IMotorcycles): Promise<IMotorcycles> {
+    const parsed = MotorcycleZodSchema.safeParse(car);
+
+    if (!parsed.success) {
+      throw parsed.error;
     }
 
-    return null;
+    return this._motorcycle.create(car);
   }
 
-  public async create(motorcycle: IMotorcycle) {
-    const newMotorcycle = await this.motorcycleOdm.create(motorcycle);
-    return this.motocyrcleDomain(newMotorcycle);
+  public async findAll(): Promise<IMotorcycles[]> {
+    return this._motorcycle.findAll();
   }
 
-  public async find() {
-    const motorcycles = await this.motorcycleOdm.findAll();
-    const arrMotorcycles = motorcycles.map((motorcycle) => this.motocyrcleDomain(motorcycle));
-    return arrMotorcycles;
+  public async findById(_id: string): Promise<IMotorcycles> {
+    const car = await this._motorcycle.findById(_id);
+    if (!car) throw new Error('Car not found')
+    return car;
   }
 
-  public async findById(id: string) {
-    const motorcycle = await this.motorcycleOdm.findById(id);
-    return this.motocyrcleDomain(motorcycle);
+  public async updated(_id: string, motorcycle: IMotorcycles): Promise<IMotorcycles | null> {
+    const parsed = MotorcycleZodSchema.safeParse(motorcycle);
+
+    if (!parsed.success) {
+      throw parsed.error;
+    }
+
+    // valida se o id é válido
+    await this.findById(_id);
+
+    return this._motorcycle.updated(_id, motorcycle);
   }
 
-  public async update(id: string, update: IMotorcycle) {
-    const updated = await this.motorcycleOdm.updated(id, update);
-    const result = this.motocyrcleDomain(updated);
-    return result;
-  }
-
-  public async delete(id: string) {
-    return await this.motorcycleOdm.delete(id);
+  public async delete(_id: string): Promise<IMotorcycles | null> {
+    return this._motorcycle.delete(_id);
   }
 }
 
-export default MotorcycleService;
+export default MotorcyleService;

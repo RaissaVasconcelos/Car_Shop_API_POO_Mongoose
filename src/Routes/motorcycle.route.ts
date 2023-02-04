@@ -1,13 +1,17 @@
 import { Router } from 'express';
 import MotorcycleController from '../Controllers/Motorcycle.controller';
+import MotorcycleModel from '../Model/MotorcycleModel';
+import MotorcyleService from '../Services/Motorcycle.service';
 
 const route = Router();
 
-route.post('/motorcycles', (req, res, nest) => new MotorcycleController(req, res, nest).create());
-route.get('/motorcycles', (req, res, nest) => new MotorcycleController(req, res, nest).find());
-route.get('/motorcycles/:id', (req, res, nest) =>
-  new MotorcycleController(req, res, nest).findById());
-route.put('/motorcycles/:id', (req, res, nest) =>
-  new MotorcycleController(req, res, nest).updatedMotorcycle());
+const motorcycle = new MotorcycleModel();
+const motorcycleService = new MotorcyleService(motorcycle);
+const motorcycleController = new MotorcycleController(motorcycleService);
+
+route.post('/motorcycles',(req, res) => motorcycleController.create(req, res));
+route.get('/motorcycles', (req, res) => motorcycleController.find(req, res));
+route.get('/motorcycles/:id', (req, res) => motorcycleController.findById(req, res));
+route.put('/motorcycles/:id', (req, res) => motorcycleController.updatedMotorcycle(req, res));
 
 export default route;
