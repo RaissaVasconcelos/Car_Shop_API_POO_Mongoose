@@ -10,8 +10,6 @@ class CarService implements IService<ICars> {
   }
 
   public async create(car: ICars): Promise<ICars> {
-    console.log('service');
-    
     // If you don't want Zod to throw errors when validation fails, use .safeParse. 
     // This method returns an object containing either the successfully parsed data 
     // or a ZodError instance containing detailed information about the validation problems
