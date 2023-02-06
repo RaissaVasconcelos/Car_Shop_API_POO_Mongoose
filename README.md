@@ -38,6 +38,10 @@ Para conseguir executar os comandos do abaixo também é necessário que seu sis
 ### 2 - Acesse o container do Node com o comando:
 
     docker exec -it car_shop bash
+    
+### 3 - Instale as dependências da aplicação com o comando:
+   
+    npm install
 
 O container da Api está mapeando a porta:
 
