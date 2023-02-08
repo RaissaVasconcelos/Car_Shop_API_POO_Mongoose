@@ -4,11 +4,11 @@ Este projeto é uma API Rest com principios de POO e o framework Mogoose.
 
 ## 🗯️ Informações Importantes
 
- A aplicação é referente criação de uma API com um simples crud, o diferencial
- do projeto consiste na implementação de uma camada extra na arquitetura MSC
- que é chamada Domain, ela é responsável por definir os atributos e métodos
- das entidades(carro e moto) e assim manter um padrão (modelagem de dados) 
- focado na regra de negócio da nossa Api.
+ O projeto consiste numa API com crud para gerenciar uma concessionária de veículos.
+ Nesta aplicação foram aplicados principios do SOLID como a inversão de dependência,
+ o ZOD para validação dos dados e o seu uso como interface das entidades usadas na aplicação,
+ e ainda, a biblioteca tsx que é responsável por rodar os arquivos em typescript sem precisar
+ fazer outro tipo de conversão facilitando a configuração de ambiente e ajudando na performace da aplicação
  
 <br />
 
